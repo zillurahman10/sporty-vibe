@@ -92,3 +92,38 @@ const addToGroup = (name) => {
     container.appendChild(div)
 
 }
+
+
+const displayRandomPlayers = () => {
+    let container = document.getElementById("players-area")
+    const url = `https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=a`
+    fetch(url)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
+        data?.player?.forEach(player => {
+            const div = document.createElement('div')
+            div.textContent = ''
+            div.innerHTML = `
+            <div class="card col-lg-3 col-sm-12" style="width: 300px">
+                <img src=${player.strThumb} class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">${player.strPlayer}</h5>
+                    <p class="card-text">Nationality: ${player.strNationality}</p>
+                    <p class="card-text">Team: ${player.strTeam}</p>
+                    <p class="card-text">Game: ${player.strSport}</p>
+                    <p class="card-text">Salary: ${player.strWage}</p>
+                    <p class="card-text">Salary: ${player.strGender}</p>
+                    <p class="card-text">${player?.strDescriptionEN?.slice(0, 80)}...</p>
+                    <button onclick="addToGroup('${player.strPlayer}')" class="btn btn-primary">Add to group</button>
+                    <button onclick="displayPlayerDetails('${player.idPlayer}')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    See Details</button>
+                </div>
+            </div>
+            `
+            container.appendChild(div)
+        })
+    })
+}
+
+displayRandomPlayers()
